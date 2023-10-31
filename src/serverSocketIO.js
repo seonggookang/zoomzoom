@@ -4,7 +4,15 @@ import express from "express";
 
 const app = express();
 
-app.set("view engine", "pug");
+// pug 사용할 때
+// app.set("view engine", "pug");
+// app.set("views", __dirname + "/views");
+// app.use("/public", express.static(__dirname + "/public")); // public 폴더를 유저에게 제공
+// app.get("/", (_, res) => res.render("home")); // home.pug지만 확장자를 안 쓴 이유 : view engine을 pug로 한다고 설정을 위에서 함.
+// app.get("/*", (_, res) => res.redirect("/"));
+
+// html사용할 떄
+app.set("view engine", "ejs"); // view engine을 ejs로 설정
 app.set("views", __dirname + "/views");
 app.use("/public", express.static(__dirname + "/public")); // public 폴더를 유저에게 제공
 app.get("/", (_, res) => res.render("home"));
@@ -26,7 +34,7 @@ wsServer.on("connection", socket => {
     // 12. 모두에게 다시 알리기
     socket.to(roomName).emit("answer", answer);
   });
-  // 15. ice받기
+  // 16. ice받기
   socket.on("ice", (ice, roomName) => {
     socket.to(roomName).emit("ice", ice);
   });
