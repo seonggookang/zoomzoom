@@ -40,5 +40,6 @@ wsServer.on("connection", socket => {
   });
 });
 
-const handelListen = () => console.log("Listening on http://localhost:3000");
+const handelListen = () =>
+  console.log("Listening on http://localhost:3000 from serverSocketIO.js");
 httpServer.listen(3000, handelListen);

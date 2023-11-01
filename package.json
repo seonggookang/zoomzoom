@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "build": "babel src/serverSocketIO.js --out-file new_js.js"
   },
   "keywords": [],
   "author": "",

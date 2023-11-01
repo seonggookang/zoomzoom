@@ -13,9 +13,6 @@ app.use("/public", express.static(__dirname + "/public")); // public 폴더를 �
 app.get("/", (_, res) => res.render("home"));
 app.get("/*", (_, res) => res.redirect("/"));
 
-const handelListen = () => console.log("Listening on http://localhost:3000");
-// app.listen(3000, handelListen);
-
 const server = http.createServer(app); // http 서버생성. express이용해서.
 // http서버 위에 websocket서버 만 듬.
 const wss = new WebSocket.Server({ server }); // 이렇게 하면 http 서버, websocket 서버 둘 다 돌릴 수 있음
