@@ -2,6 +2,10 @@ import http from "http";
 import SocketIO from "socket.io";
 import express from "express";
 
+// const http = require("http");
+// const SocketIO = require("socket.io");
+// const express = require("express");
+
 const app = express();
 
 // pug 사용할 때
@@ -42,4 +46,4 @@ wsServer.on("connection", socket => {
 
 const handelListen = () =>
   console.log("Listening on http://localhost:3000 from serverSocketIO.js");
-httpServer.listen(3000, handelListen);
+httpServer.listen(80, handelListen);
