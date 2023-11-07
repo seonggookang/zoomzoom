@@ -1,10 +1,8 @@
 import http from "http";
+import https from "https";
 import SocketIO from "socket.io";
+import fs from "fs";
 import express from "express";
-
-// const http = require("http");
-// const SocketIO = require("socket.io");
-// const express = require("express");
 
 const app = express();
 
@@ -23,6 +21,7 @@ app.get("/", (_, res) => res.render("home"));
 app.get("/*", (_, res) => res.redirect("/"));
 
 const httpServer = http.createServer(app); // http 서버생성. express이용해서.
+const server = https.createServer(options, app);
 const wsServer = SocketIO(httpServer); // 통상적으로 io로 변수를 둠.
 
 wsServer.on("connection", socket => {
@@ -44,6 +43,17 @@ wsServer.on("connection", socket => {
   });
 });
 
-const handelListen = () =>
-  console.log("Listening on http://localhost:3000 from serverSocketIO.js");
-httpServer.listen(3000, handelListen);
+httpServer.listen(
+  3000,
+  console.log("Listening on http://localhost:3000 from serverSocketIO.js")
+);
+
+const options = {
+  ca: fs.readFileSync(__dirname + "/server.csr"),
+  key: fs.readFileSync(__dirname + "/server.key"),
+  cert: fs.readFileSync(__dirname + "/server.crt")
+};
+
+server.listen(4443, () => {
+  console.log("waiting for at 4443 port!!!!!!!!!!");
+});

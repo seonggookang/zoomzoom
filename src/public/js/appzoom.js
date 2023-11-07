@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io(); // https에서는 io is not defined 에러. localhost에서는 잘 돌아감.
 
 const myFace = document.getElementById("myFace");
 // 유저로부터 stream을 받아야함.
@@ -18,9 +18,7 @@ let myPeerConnection;
 async function getCameras() {
   try {
     const devices = await navigator.mediaDevices.enumerateDevices();
-    const caeras = devices.filter(device => device.kind === "videoinput");
-    console.log("caeras >> ", caeras);
-    console.log("devices >> ", devices);
+    // const caeras = devices.filter(device => device.kind === "videoinput");
   } catch (error) {
     console.log(error);
   }
@@ -34,15 +32,15 @@ async function getMedia() {
       audio: true, // constraints. 우리가 얻고싶어하는 것들(오디오, 비디오)
       video: true
     });
+    console.log("myStream >> ", myStream);
     myFace.srcObject = myStream; // stream을 myFace안에 넣어줌
     getCameras();
   } catch (error) {
-    console.log(e);
+    console.log(error);
   }
 }
 
 function handleMuteClick() {
-  console.log("myStream Audio >> ", myStream.getAudioTracks());
   myStream.getAudioTracks().forEach(track => (track.enabled = !track.enabled));
   if (!muted) {
     muteBtn.innerText = "Unmute";
@@ -75,10 +73,9 @@ async function initCall() {
   welcome.hidden = true;
   call.hidden = false;
   await getMedia(); // 카메라, 마이크 등 다가져옴
-  makeConnection(); // 77번줄에서 78넘어가는 게 이해가 잘 안됨. (아 여기는 await을 안해줬네. 기다릴필요가 없는거지)
-  // 78번줄 시행해주고 그다음에 89번줄로 갈텐데.
+  makeConnection(); // 여기는 await을 안해줬네. 기다릴필요가 없는거지.
   // 원래 순서는 offer, answer를 다하고 ice candidate을 시행하는건데, 코드상으로는 반대임. why?
-  // Web Socket들의 속도가 media를 가져오는 속도나 연결을 만드는 속도보다 빠르기 때문.
+  // Web Socket들의 속도가 media를 가져오는 속도나 연결을 만드는 속도보다 빠름.
 }
 
 // 우리가 방에 참가하고 나서 initCall를 호출하지 말고 방에 참가하기 전에 initCall를 호출.
@@ -156,8 +153,7 @@ function makeConnection() {
   myPeerConnection.addEventListener("icecandidate", handleIce);
   // >> 누군가 getMedia()함수를 불렀을 때 myStream을 공유. 누구든지 접촉할 수있도록. (let myPeerConnection)
   // 2. addStream() (이건 낡은함수. 더 이상 안씀)
-  console.log("myStream.getTracks()11 >>", myStream.getTracks()); //video, audio가 생김
-  // 이 2개를 우리의 stream에 추가.
+  // console.log("myStream.getTracks()11 >>", myStream.getTracks()); //video, audio가 생김
 
   // 18. addIceCandidate로 ice 송수신 끝났으니 addStream
   myPeerConnection.addEventListener("addstream", handleAddStream);
