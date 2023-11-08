@@ -21,7 +21,7 @@ app.get("/", (_, res) => res.render("home"));
 app.get("/*", (_, res) => res.redirect("/"));
 
 const httpServer = http.createServer(app); // http 서버생성. express이용해서.
-const server = https.createServer(options, app);
+
 const wsServer = SocketIO(httpServer); // 통상적으로 io로 변수를 둠.
 
 wsServer.on("connection", socket => {
@@ -53,7 +53,7 @@ const options = {
   key: fs.readFileSync(__dirname + "/server.key"),
   cert: fs.readFileSync(__dirname + "/server.crt")
 };
-
+const server = https.createServer(options, app);
 server.listen(4443, () => {
   console.log("waiting for at 4443 port!!!!!!!!!!");
 });
