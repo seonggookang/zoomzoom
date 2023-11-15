@@ -1,8 +1,8 @@
-const socket = io(); // https에서는 io is not defined 에러. localhost에서는 잘 돌아감.
+const socket = io();
 
 const myFace = document.getElementById("myFace");
 // 유저로부터 stream을 받아야함.
-// stream은 비디오와 오디오가 결합된거.
+// stream = 비디오 + 오디오
 const muteBtn = document.getElementById("mute");
 const cameraBtn = document.getElementById("camera");
 const call = document.getElementById("call");

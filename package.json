@@ -1,9 +1,7 @@
 {
   "name": "zoom",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
-    "dev": "nodemon",
     "build": "babel src/serverSocketIO.js --out-file new.js"
   },
   "keywords": [],
@@ -12,20 +10,16 @@
   "dependencies": {
     "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "localtunnel": "^2.0.2",
     "openssl": "^2.0.0",
-    "pug": "^3.0.2",
     "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "ws": "^8.14.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
     "@babel/core": "^7.23.2",
     "@babel/node": "^7.22.19",
-    "@babel/preset-env": "^7.23.2",
-    "html-webpack-plugin": "^5.5.3",
-    "nodemon": "^3.0.1",
-    "webpack": "^5.89.0"
+    "@babel/preset-env": "^7.23.2"
   },
   "description": "zoom clone using nodejs, webrtc, websockets"
 }

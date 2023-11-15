@@ -1,28 +1,32 @@
-import http from "http";
-import https from "https";
-import SocketIO from "socket.io";
-import fs from "fs";
-import express from "express";
+// import http from "http";
+// import https from "https";
+// import { Server } from "socket.io";
+// import fs from "fs";
+// import express from "express";
+const http = require("http");
+const https = require("https");
+const Server = require("socket.io");
+const fs = require("fs");
+const express = require("express");
 
 const app = express();
 
-// pug 사용할 때
-// app.set("view engine", "pug");
-// app.set("views", __dirname + "/views");
-// app.use("/public", express.static(__dirname + "/public")); // public 폴더를 유저에게 제공
-// app.get("/", (_, res) => res.render("home")); // home.pug지만 확장자를 안 쓴 이유 : view engine을 pug로 한다고 설정을 위에서 함.
-// app.get("/*", (_, res) => res.redirect("/"));
-
-// html사용할 떄
 app.set("view engine", "ejs"); // view engine을 ejs로 설정
 app.set("views", __dirname + "/views");
 app.use("/public", express.static(__dirname + "/public")); // public 폴더를 유저에게 제공
 app.get("/", (_, res) => res.render("home"));
-app.get("/*", (_, res) => res.redirect("/"));
 
 const httpServer = http.createServer(app); // http 서버생성. express이용해서.
-
-const wsServer = SocketIO(httpServer); // 통상적으로 io로 변수를 둠.
+const options = {
+  ca: fs.readFileSync(__dirname + "/server.csr"),
+  key: fs.readFileSync(__dirname + "/server.key"),
+  cert: fs.readFileSync(__dirname + "/server.crt")
+};
+const httpsServer = https.createServer(options, app);
+// const wsServer = SocketIO(httpServer);
+// const wsServer = new Server(server);
+// const wsServer = Server(httpServer);
+const wsServer = Server(httpsServer);
 
 wsServer.on("connection", socket => {
   socket.on("join_room", roomName => {
@@ -43,17 +47,13 @@ wsServer.on("connection", socket => {
   });
 });
 
+// 클라
 httpServer.listen(
   3000,
-  console.log("Listening on http://localhost:3000 from serverSocketIO.js")
+  console.log("Listening on 'http' from serverSocketIO.js")
 );
 
-const options = {
-  ca: fs.readFileSync(__dirname + "/server.csr"),
-  key: fs.readFileSync(__dirname + "/server.key"),
-  cert: fs.readFileSync(__dirname + "/server.crt")
-};
-const server = https.createServer(options, app);
-server.listen(4443, () => {
-  console.log("waiting for at 4443 port!!!!!!!!!!");
+// 서버
+httpsServer.listen(443, () => {
+  console.log("Server is running at https://3.36.61.0");
 });
